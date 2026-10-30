@@ -1,0 +1,8 @@
+<article class="product-card">
+  <a class="product-card__media" href="{{ product.url }}">
+    {% if product.featured_image %}{{ product.featured_image | image_url: width: 800 | image_tag: widths: '240, 360, 540, 800', sizes: '(min-width: 990px) 25vw, (min-width: 600px) 33vw, 50vw', loading: 'lazy', class: 'product-card__image' }}{% else %}{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}
+    {% unless product.available %}<span class="badge">Sold out</span>{% else %}{% if product.compare_at_price > product.price %}<span class="badge badge--sale">Sale</span>{% endif %}{% endunless %}
+    <span class="product-card__view" aria-hidden="true">Discover {% render 'icon', name: 'arrow' %}</span>
+  </a>
+  <div class="product-card__info"><p class="product-card__vendor">{{ product.vendor | escape }}</p><h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h3><div class="price">{% if product.price_varies %}<span class="price__from">From </span>{% endif %}<span>{{ product.price | money }}</span>{% if product.compare_at_price > product.price %}<s>{{ product.compare_at_price | money }}</s>{% endif %}</div></div>
+</article>

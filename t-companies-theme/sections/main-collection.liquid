@@ -1,0 +1,12 @@
+<section class="section page-width">
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><a href="{{ routes.collections_url }}">Collections</a></nav>
+  <div class="catalog-heading"><p class="eyebrow">THE T COMPANIES COLLECTION</p><h1>{{ collection.title | escape }}</h1>{% if collection.description != blank %}<div class="rte catalog-description">{{ collection.description }}</div>{% endif %}</div>
+  <div class="catalog-layout"><aside class="catalog-sidebar" aria-label="Product filters">{% render 'filters', results: collection %}</aside>
+    <div class="catalog-results">
+      <div class="catalog-toolbar"><p>{{ collection.products_count }} {% if collection.products_count == 1 %}product{% else %}products{% endif %}</p><form method="get" action="{{ collection.url }}" class="sort-form">{% for filter in collection.filters %}{% for value in filter.active_values %}<input type="hidden" name="{{ value.param_name }}" value="{{ value.value | escape }}">{% endfor %}{% if filter.type == 'price_range' %}{% if filter.min_value.value %}<input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | divided_by: 100.0 }}">{% endif %}{% if filter.max_value.value %}<input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | divided_by: 100.0 }}">{% endif %}{% endif %}{% endfor %}<label for="SortBy-{{ section.id }}">Sort by</label>{% assign sort_by = collection.sort_by | default: collection.default_sort_by %}<select id="SortBy-{{ section.id }}" name="sort_by">{% for option in collection.sort_options %}<option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name | escape }}</option>{% endfor %}</select><button type="submit" class="text-button">Sort</button></form></div>
+      {% render 'active-filters', results: collection %}
+      {% paginate collection.products by 24 %}<div class="product-grid">{% for product in collection.products %}{% render 'product-card', product: product %}{% else %}<div class="empty-state"><h2>No products found</h2><p>Try removing a filter or explore another collection.</p><a class="button" href="{{ collection.url }}">Clear filters</a></div>{% endfor %}</div>{% render 'pagination', paginate: paginate %}{% endpaginate %}
+    </div>
+  </div>
+</section>
+{% schema %}{"name":"Collection products","settings":[]}{% endschema %}

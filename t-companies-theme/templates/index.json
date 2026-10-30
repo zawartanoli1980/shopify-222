@@ -1,0 +1,116 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "departments": {
+      "type": "featured-collections",
+      "settings": {},
+      "blocks": {
+        "cat1": {
+          "type": "collection",
+          "settings": {
+            "title": "Electronics"
+          }
+        },
+        "cat2": {
+          "type": "collection",
+          "settings": {
+            "title": "Fashion"
+          }
+        },
+        "cat3": {
+          "type": "collection",
+          "settings": {
+            "title": "Home & Living"
+          }
+        },
+        "cat4": {
+          "type": "collection",
+          "settings": {
+            "title": "Gadgets & Tools"
+          }
+        },
+        "cat5": {
+          "type": "collection",
+          "settings": {
+            "title": "Accessories"
+          }
+        },
+        "cat6": {
+          "type": "collection",
+          "settings": {
+            "title": "Outdoor & Lifestyle"
+          }
+        }
+      },
+      "block_order": [
+        "cat1",
+        "cat2",
+        "cat3",
+        "cat4",
+        "cat5",
+        "cat6"
+      ]
+    },
+    "bestsellers": {
+      "type": "featured-products",
+      "settings": {
+        "eyebrow": "THE CONSIDERED EDIT",
+        "heading": "Your next great discovery."
+      }
+    },
+    "story": {
+      "type": "brand-story",
+      "settings": {}
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {}
+    },
+    "trust": {
+      "type": "trust-strip",
+      "settings": {},
+      "blocks": {
+        "secure": {
+          "type": "benefit",
+          "settings": {
+            "icon": "lock",
+            "heading": "Secure checkout",
+            "text": "Shop with available secure payment methods."
+          }
+        },
+        "details": {
+          "type": "benefit",
+          "settings": {
+            "icon": "detail",
+            "heading": "Clear product details",
+            "text": "Make an informed choice with useful specifications."
+          }
+        },
+        "support": {
+          "type": "benefit",
+          "settings": {
+            "icon": "support",
+            "heading": "Here to help",
+            "text": "Contact our team with your product and order questions."
+          }
+        }
+      },
+      "block_order": [
+        "secure",
+        "details",
+        "support"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "departments",
+    "bestsellers",
+    "story",
+    "testimonials",
+    "trust"
+  ]
+}

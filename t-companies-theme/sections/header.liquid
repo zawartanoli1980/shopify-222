@@ -1,0 +1,32 @@
+<header class="site-header">
+  <div class="page-width header-main">
+    <a class="brand" href="{{ routes.root_url }}" aria-label="{{ settings.brand_name | escape }} home">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 500 | image_tag: class: 'brand__image', widths: '150, 250, 500', loading: 'eager', alt: settings.brand_name }}
+      {% else %}<span class="brand__monogram" aria-hidden="true">T<span>.</span></span><span class="brand__wordmark">{{ settings.brand_name | escape }}<small>CURATED FOR EVERYDAY</small></span>{% endif %}
+    </a>
+    <form class="header-search" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="visually-hidden" for="HeaderSearch">Search products</label>
+      <input id="HeaderSearch" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search your next everyday essential" autocomplete="off">
+      <input type="hidden" name="type" value="product">
+      <button type="submit" aria-label="Search">{% render 'icon', name: 'search' %}</button>
+    </form>
+    <div class="header-actions">
+      {% if shop.customer_accounts_enabled %}<a href="{{ routes.account_url }}" aria-label="Your account">{% render 'icon', name: 'user' %}</a>{% endif %}
+      <a class="cart-link" href="{{ routes.cart_url }}" aria-label="Bag, {{ cart.item_count }} items">{% render 'icon', name: 'bag' %}<span class="cart-count">{{ cart.item_count }}</span></a>
+    </div>
+  </div>
+  <div class="header-nav-wrap">
+    <div class="page-width header-nav-inner">
+      <details class="mobile-menu">
+        <summary>{% render 'icon', name: 'menu' %} Shop departments</summary>
+        <nav aria-label="Mobile navigation">{% render 'navigation', menu: section.settings.menu, mobile: true %}</nav>
+      </details>
+      <nav class="desktop-nav" aria-label="Main navigation">{% render 'navigation', menu: section.settings.menu %}</nav>
+      <span class="header-caption">A world of well-chosen things.</span>
+    </div>
+  </div>
+</header>
+{% schema %}
+{"name":"Header","settings":[{"type":"image_picker","id":"logo","label":"Logo"},{"type":"link_list","id":"menu","label":"Main menu","default":"main-menu"}]}
+{% endschema %}

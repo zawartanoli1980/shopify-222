@@ -1,0 +1,11 @@
+[
+  {"name":"theme_info","theme_name":"T Companies","theme_version":"1.0.0","theme_author":"T Companies","theme_documentation_url":"https://help.shopify.com/en/manual/online-store/themes","theme_support_url":"https://help.shopify.com/"},
+  {"name":"Brand and layout","settings":[
+    {"type":"text","id":"brand_name","label":"Brand name","default":"T Companies"},
+    {"type":"image_picker","id":"favicon","label":"Favicon"},
+    {"type":"color","id":"accent_color","label":"Accent color","default":"#2563EB"},
+    {"type":"color","id":"accent_text_color","label":"Accent button text","default":"#FFFFFF"},
+    {"type":"range","id":"page_width","min":1100,"max":1600,"step":50,"unit":"px","label":"Maximum page width","default":1400},
+    {"type":"paragraph","content":"Check text contrast after changing colors. Configure menus, real products, policies, shipping and payments in Shopify before launch."}
+  ]}
+]

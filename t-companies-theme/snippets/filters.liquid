@@ -1,0 +1,18 @@
+<form class="filter-form" method="get" action="{{ results.url | default: routes.search_url }}">
+  {% if request.page_type == 'search' %}<input type="hidden" name="q" value="{{ search.terms | escape }}"><input type="hidden" name="type" value="product">{% endif %}
+  {% if results.sort_by %}<input type="hidden" name="sort_by" value="{{ results.sort_by | escape }}">{% endif %}
+  <details class="filter-drawer" open>
+    <summary>Filter products {% render 'icon', name: 'chevron' %}</summary>
+    <div class="filter-drawer__body">
+      {% for filter in results.filters %}
+        <details class="filter-group" open><summary>{{ filter.label | escape }} {% render 'icon', name: 'chevron' %}</summary>
+          {% case filter.type %}
+            {% when 'boolean', 'list' %}<ul class="filter-values">{% for value in filter.values %}<li><label><input type="checkbox" name="{{ value.param_name }}" value="{{ value.value | escape }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}><span>{{ value.label | escape }}</span><small>{{ value.count }}</small></label></li>{% endfor %}</ul>
+            {% when 'price_range' %}<div class="price-inputs"><div><label for="PriceFrom-{{ section.id }}">Min ({{ cart.currency.iso_code }})</label><input id="PriceFrom-{{ section.id }}" name="{{ filter.min_value.param_name }}" type="number" min="0" step="0.01" placeholder="0"{% if filter.min_value.value %} value="{{ filter.min_value.value | divided_by: 100.0 }}"{% endif %}></div><div><label for="PriceTo-{{ section.id }}">Max ({{ cart.currency.iso_code }})</label><input id="PriceTo-{{ section.id }}" name="{{ filter.max_value.param_name }}" type="number" min="0" step="0.01" placeholder="{{ filter.range_max | divided_by: 100.0 }}"{% if filter.max_value.value %} value="{{ filter.max_value.value | divided_by: 100.0 }}"{% endif %}></div></div>
+          {% endcase %}
+        </details>
+      {% endfor %}
+      {% if results.filters.size > 0 %}<button class="button button--full" type="submit">Apply filters</button>{% else %}<p class="muted">Filters appear here when configured in Shopify Search & Discovery.</p>{% endif %}
+    </div>
+  </details>
+</form>

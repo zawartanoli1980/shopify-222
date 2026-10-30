@@ -1,0 +1,20 @@
+<ul class="{% if mobile %}mobile-nav-list{% else %}nav-list{% endif %}">
+  {% if menu.links.size > 0 %}
+    {% for link in menu.links %}
+      <li>
+        {% if link.links.size > 0 %}
+          <details class="nav-dropdown">
+            <summary>{{ link.title | escape }} {% render 'icon', name: 'chevron' %}</summary>
+            <div class="nav-dropdown__panel">
+              <a class="nav-dropdown__all" href="{{ link.url }}">Shop all {{ link.title | escape }} →</a>
+              <ul>{% for child in link.links %}<li><a href="{{ child.url }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>{% if child.links.size > 0 %}<ul>{% for grandchild in child.links %}<li><a href="{{ grandchild.url }}">{{ grandchild.title | escape }}</a></li>{% endfor %}</ul>{% endif %}</li>{% endfor %}</ul>
+            </div>
+          </details>
+        {% else %}<a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>{% endif %}
+      </li>
+    {% endfor %}
+  {% else %}
+    <li><a href="{{ routes.all_products_collection_url }}">Shop all</a></li>
+    <li><a href="{{ routes.collections_url }}">Collections</a></li>
+  {% endif %}
+</ul>

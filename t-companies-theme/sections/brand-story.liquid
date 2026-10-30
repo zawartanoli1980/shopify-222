@@ -1,0 +1,33 @@
+<section class="section story-section" aria-labelledby="story-title-{{ section.id }}">
+  <div class="page-width story-grid">
+    <div class="story-media">
+      {% if section.settings.image != blank %}
+        {{ section.settings.image | image_url: width: 1200 | image_tag: widths: '400, 700, 1000, 1200', sizes: '(min-width: 990px) 45vw, 100vw', loading: 'lazy' }}
+      {% else %}
+        <div class="story-monogram" aria-hidden="true"><span>T.</span><small>COMPANIES</small></div>
+      {% endif %}
+      <span class="story-media__label">{{ section.settings.image_label | escape }}</span>
+    </div>
+    <div class="story-copy">
+      <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2 id="story-title-{{ section.id }}">{{ section.settings.heading | escape | newline_to_br }}</h2>
+      <div class="rte">{{ section.settings.text }}</div>
+      {% if section.settings.button_label != blank %}<a class="button button--secondary" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }} <span class="diagonal-arrow" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span></a>{% endif %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name":"Brand story",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"The T Companies philosophy"},
+    {"type":"textarea","id":"heading","label":"Heading","default":"Good things.\nGreat possibilities."},
+    {"type":"richtext","id":"text","label":"Story","default":"<p>We believe the things you surround yourself with should bring something to your day. More purpose. More style. More possibility.</p><p>T Companies brings technology, home, and personal style together in one considered collection. Find the details that make everyday life feel a little more exceptional.</p>"},
+    {"type":"image_picker","id":"image","label":"Story image"},
+    {"type":"text","id":"image_label","label":"Image caption","default":"EVERYDAY, RECONSIDERED."},
+    {"type":"text","id":"button_label","label":"Button label","default":"Discover our collection"},
+    {"type":"url","id":"button_link","label":"Button link"}
+  ],
+  "presets":[{"name":"Brand story"}]
+}
+{% endschema %}

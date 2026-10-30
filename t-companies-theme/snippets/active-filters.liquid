@@ -1,0 +1,6 @@
+<div class="active-filters">
+  {% for filter in results.filters %}
+    {% for value in filter.active_values %}<a class="filter-chip" href="{{ value.url_to_remove }}">{{ filter.label | escape }}: {{ value.label | escape }} <span aria-hidden="true">×</span><span class="visually-hidden"> Remove filter</span></a>{% endfor %}
+    {% if filter.type == 'price_range' %}{% if filter.min_value.value != nil or filter.max_value.value != nil %}<a class="filter-chip" href="{{ filter.url_to_remove }}">{{ filter.min_value.value | default: 0 | money }}–{{ filter.max_value.value | default: filter.range_max | money }} <span aria-hidden="true">×</span><span class="visually-hidden"> Remove price filter</span></a>{% endif %}{% endif %}
+  {% endfor %}
+</div>

@@ -1,0 +1,34 @@
+<section class="section page-width">
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><a href="{{ routes.all_products_collection_url }}">Shop</a><span aria-hidden="true">/</span><span>{{ product.title | escape }}</span></nav>
+  {% assign selected_variant = product.selected_or_first_available_variant %}
+  <div class="product-layout" data-product-section>
+    <div class="product-gallery">
+      <div class="product-main-image">{% if selected_variant.featured_image or product.featured_image %}{% assign main_image = selected_variant.featured_image | default: product.featured_image %}{{ main_image | image_url: width: 1600 | image_tag: widths: '480, 800, 1200, 1600', sizes: '(min-width: 990px) 55vw, 100vw', loading: 'eager', class: 'product-main-image__img' }}{% else %}{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}</div>
+      {% if product.images.size > 1 %}<div class="product-thumbnails">{% for image in product.images %}<button type="button" data-product-thumbnail data-src="{{ image | image_url: width: 1600 }}" data-alt="{{ image.alt | default: product.title | escape }}" aria-label="View image {{ forloop.index }}"{% if image.id == main_image.id %} aria-pressed="true"{% else %} aria-pressed="false"{% endif %}>{{ image | image_url: width: 180 | image_tag: loading: 'lazy', widths: '90, 180' }}</button>{% endfor %}</div>{% endif %}
+      {% for media in product.media %}{% case media.media_type %}{% when 'video' %}<div class="product-extra-media">{{ media | video_tag: controls: true, preload: 'metadata', image_size: '800x' }}</div>{% when 'external_video' %}<div class="product-extra-media">{{ media | external_video_tag: loading: 'lazy' }}</div>{% when 'model' %}<div class="product-extra-media">{{ media | model_viewer_tag: reveal: 'interaction', toggleable: true }}</div>{% endcase %}{% endfor %}
+    </div>
+    <div class="product-details">
+      {% if product.vendor != blank %}<p class="eyebrow">{{ product.vendor | escape }}</p>{% endif %}
+      <h1>{{ product.title | escape }}</h1>
+      <div class="product-price price" aria-live="polite"><span data-product-price>{{ selected_variant.price | money }}</span><s data-product-compare{% unless selected_variant.compare_at_price > selected_variant.price %} hidden{% endunless %}>{{ selected_variant.compare_at_price | money }}</s></div>
+      {% if cart.taxes_included %}<p class="product-tax-note">Taxes included.{% if shop.shipping_policy.body != blank %} <a href="{{ shop.shipping_policy.url }}">Shipping</a> calculated at checkout.{% endif %}</p>{% elsif shop.shipping_policy.body != blank %}<p class="product-tax-note"><a href="{{ shop.shipping_policy.url }}">Shipping</a> and applicable taxes calculated at checkout.</p>{% endif %}
+      {% assign product_form_id = 'ProductForm-' | append: section.id %}
+      {% form 'product', product, id: product_form_id, class: 'product-form' %}
+        {% if form.errors %}<div class="form-errors" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+        <label for="Variant-{{ section.id }}">{% if product.has_only_default_variant %}Product{% else %}Choose your options{% endif %}</label>
+        <select id="Variant-{{ section.id }}" name="id" data-variant-select>
+          {% for variant in product.variants %}<option value="{{ variant.id }}" data-price="{{ variant.price | money | escape }}" data-compare="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | escape }}{% endif %}" data-available="{{ variant.available }}" data-min="{{ variant.quantity_rule.min | default: 1 }}" data-step="{{ variant.quantity_rule.increment | default: 1 }}" data-max="{{ variant.quantity_rule.max }}"{% if variant.featured_image %} data-image="{{ variant.featured_image | image_url: width: 1600 }}" data-alt="{{ variant.featured_image.alt | default: product.title | escape }}"{% endif %}{% if variant == selected_variant %} selected{% endif %}>{% if product.has_only_default_variant %}{{ product.title | escape }}{% else %}{{ variant.title | escape }}{% endif %} — {{ variant.price | money }}{% unless variant.available %} — Sold out{% endunless %}</option>{% endfor %}
+        </select>
+        <div class="product-purchase"><div><label for="Quantity-{{ section.id }}">Quantity</label><input id="Quantity-{{ section.id }}" type="number" name="quantity" value="{{ selected_variant.quantity_rule.min | default: 1 }}" min="{{ selected_variant.quantity_rule.min | default: 1 }}" step="{{ selected_variant.quantity_rule.increment | default: 1 }}"{% if selected_variant.quantity_rule.max %} max="{{ selected_variant.quantity_rule.max }}"{% endif %}></div><button class="button" type="submit" name="add" data-add-to-cart{% unless selected_variant.available %} disabled{% endunless %}>{% if selected_variant.available %}Add to bag{% else %}Sold out{% endif %}</button></div>
+        {% if section.settings.dynamic_checkout %}{{ form | payment_button }}{% endif %}
+      {% endform %}
+      <div class="product-service-note">{% render 'icon', name: 'shield' %}<span>Secure checkout with available payment methods.</span></div>
+      <details class="product-accordion" open><summary>Product details {% render 'icon', name: 'chevron' %}</summary><div class="rte">{{ product.description }}</div></details>
+      {% if shop.shipping_policy.body != blank %}<details class="product-accordion"><summary>Shipping & delivery {% render 'icon', name: 'chevron' %}</summary><div class="rte">{{ shop.shipping_policy.body }}</div></details>{% endif %}
+      {% if shop.refund_policy.body != blank %}<details class="product-accordion"><summary>Returns {% render 'icon', name: 'chevron' %}</summary><div class="rte">{{ shop.refund_policy.body }}</div></details>{% endif %}
+      {% for block in section.blocks %}{% render block %}{% endfor %}
+    </div>
+  </div>
+</section>
+<script type="application/ld+json">{{ product | structured_data }}</script>
+{% schema %}{"name":"Product information","settings":[{"type":"checkbox","id":"dynamic_checkout","label":"Show accelerated checkout","default":false}],"blocks":[{"type":"@app"}]}{% endschema %}
